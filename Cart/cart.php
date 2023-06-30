@@ -1,6 +1,8 @@
 <?php
+// echo count($_SESSION['cart']);
+// die();
 if(isset($_SESSION['cus_user']) && isset($_SESSION['cus_pass'])) {
-    if(isset($_SESSION["cart"])){
+    if(count($_SESSION["cart"]) > 0){
         if(isset($_POST["sbm"])){
             foreach($_POST["qtt"] as $prd_id=>$qtt){
     
@@ -17,7 +19,7 @@ if(isset($_SESSION['cus_user']) && isset($_SESSION['cus_pass'])) {
         $sql = "SELECT * FROM tbl_product
                 WHERE prd_id IN($str_id)";
         $query = mysqli_query($connect, $sql);
-    }
+    
 ?>
 <!--	Cart	-->
 <div id="my-cart">
@@ -42,7 +44,7 @@ if(isset($_SESSION['cus_user']) && isset($_SESSION['cus_pass'])) {
         <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
             <input name="qtt[<?php echo $item["prd_id"];?>]" type="number" id="quantity" class="form-control form-blue quantity" value=<?php echo $_SESSION["cart"][$item["prd_id"]];?> min="1">
         </div>
-        <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b><?php echo number_format($item['prd_price']); ?>đ</b><a href="#">Xóa</a></div>
+        <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b><?php echo number_format($item['prd_price']); ?>đ</b><a href="Cart/delete_cart.php?prd_id=<?php echo $item["prd_id"] ?>">Xóa</a></div>
     </div>
     <?php } ?>
     <div class="row">
@@ -94,11 +96,14 @@ if(isset($_SESSION['cus_user']) && isset($_SESSION['cus_pass'])) {
 </div>
 <!--	End Customer Info	-->
 <?php
-}else {
-//    header('location: index.php?redirect=login');
-    echo '<script>
-    window.location.href("index.php?redirect=login");
-    </script>';
+}else {?>
+<div class="alert alert-danger mt-3">Không có sản phẩm nào trong giỏ hàng!</div>
+
+<?php } }else {
+   header('location: index.php?redirect=login');
+    // echo '<script>
+    // window.location.href("index.php?redirect=login");
+    // </script>';
 }
     ?>
 
